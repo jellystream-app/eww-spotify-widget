@@ -28,7 +28,7 @@ $glow: 0 1px 3px rgba(0, 0, 0, 0.8), 0 2px 14px rgba(0, 0, 0, 0.55);
 .lyrics { margin-top: 30px; }
 .lyric { font-weight: 700; padding: 5px 0; }
 .lyric.cur  { color: #fff; font-size: 25px; text-shadow: $glow; }
-.lyric.near { color: rgba(255, 255, 255, 0.45); font-size: 19px; text-shadow: 0 0 2px rgba(255, 255, 255, 0.55); }
+.lyric.near { color: rgba(255, 255, 255, 0.65); font-size: 19px; text-shadow: 0 0 2px rgba(255, 255, 255, 0.55); }
 .lyric.mid  { color: transparent; font-size: 19px; text-shadow: 0 0 5px rgba(255, 255, 255, 0.5); }
 .lyric.far  { color: transparent; font-size: 19px; text-shadow: 0 0 9px rgba(255, 255, 255, 0.35); }
 
@@ -53,5 +53,5 @@ $glow: 0 1px 3px rgba(0, 0, 0, 0.8), 0 2px 14px rgba(0, 0, 0, 0.55);
 
 .cl { font-weight: 700; padding: 4px 0; }
 .cl.cur  { color: #fff; font-size: 21px; text-shadow: $glow; }
-.cl.near { color: rgba(255, 255, 255, 0.45); font-size: 15px; text-shadow: 0 0 2px rgba(255, 255, 255, 0.55); }
+.cl.near { color: rgba(255, 255, 255, 0.65); font-size: 15px; text-shadow: 0 0 2px rgba(255, 255, 255, 0.55); }
 .cl.mid  { color: transparent; font-size: 15px; text-shadow: 0 0 5px rgba(255, 255, 255, 0.5); }
