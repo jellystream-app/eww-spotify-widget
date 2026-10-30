@@ -43,12 +43,12 @@ $glow: 0 1px 3px rgba(0, 0, 0, 0.8), 0 2px 14px rgba(0, 0, 0, 0.55);
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
 }
 
-.c-title  { color: #fff; font-size: 17px; font-weight: 700; margin-top: 16px; text-shadow: $glow; }
+.c-title  { color: #fff; font-size: 16px; font-weight: 700; margin-top: 16px; text-shadow: $glow; }
 .c-artist { color: rgba(255, 255, 255, 0.75); font-size: 13px; margin-top: 2px; text-shadow: $glow; }
 
 .c-progress { margin-top: 14px; }
 .c-progress .time { font-size: 11px; min-width: 28px; }
-.c-bar trough   { min-width: 116px; min-height: 4px; border-radius: 99px; background-color: rgba(255, 255, 255, 0.28); }
+.c-bar trough   { min-width: 100px; min-height: 4px; border-radius: 99px; background-color: rgba(255, 255, 255, 0.28); }
 .c-bar progress { min-height: 4px; border-radius: 99px; background-color: #fff; }
 
 .cl { font-weight: 700; padding: 4px 0; }
