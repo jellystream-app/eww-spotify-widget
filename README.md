@@ -1,73 +1,57 @@
-<div align="center">
+# viper-music-widget
 
-# Eww Spotify Widget
+Minimal eww widget for **GNOME on Wayland**: cover, title, progress bar and **live synced lyrics**.
+No background, no gradient, no separators. Auto-detects Spotify (any MPRIS player works).
 
-Cover, title, progress bar and live synced lyrics for GNOME on Wayland.
+<!-- screenshot here -->
 
-<img src="docs.png" alt="Preview" width="760">
-
-</div>
-
-## About
-
-A small eww widget that shows what Spotify is playing: cover, title, progress and synced lyrics. No background, no gradient, no separators. Any MPRIS player works, Spotify is preferred.
-
-Lyrics come from [LRCLIB](https://lrclib.net) and are cached locally. Lines further away from the current one are blurred with `text-shadow`. The only dependencies are `python3` and `python3-gi`.
+## Features
+- Spotify auto-detection via MPRIS (Spotify first, otherwise any playing player)
+- Synced lyrics from [LRCLIB](https://lrclib.net) (cached in `~/.cache/viper-music`)
+- Blur effect on lyrics via `text-shadow`, fading with distance to the current line
+- Zero extra dependencies besides `python3` + `python3-gi`
 
 ## Requirements
-
-GNOME's compositor (Mutter) has no layer-shell, so eww has to be built with the X11 backend and runs through XWayland.
+- `python3`, `python3-gi` (preinstalled on GNOME)
+- **eww built with the X11 backend** – GNOME/Mutter has no layer-shell, so eww runs through XWayland
 
 ```sh
 sudo apt install -y git build-essential pkg-config libgtk-3-dev libpango1.0-dev \
   libgdk-pixbuf-2.0-dev libdbusmenu-gtk3-dev libcairo2-dev libglib2.0-dev libx11-dev python3-gi
-
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y && . "$HOME/.cargo/env"
-
 git clone https://github.com/elkowar/eww ~/eww
 cd ~/eww && cargo build --release --no-default-features --features x11
 mkdir -p ~/.local/bin && cp target/release/eww ~/.local/bin/
 ```
 
 ## Install
-
 ```sh
-git clone https://github.com/jellystream-app/eww-spotify-widget.git
-cd eww-spotify-widget
-sh install.sh
+git clone https://github.com/YOURNAME/viper-music-widget
+cd viper-music-widget && sh install.sh
 ~/.config/eww-viper/start.sh
 ```
 
-## Configuration
-
-| Setting | Location |
-|---|---|
-| Position and size | `:geometry` in `eww-viper/eww.yuck` |
-| Preferred player | `PREFER` in `scripts/music.py` |
-| Lyrics timing | `LEAD` in `scripts/music.py` |
-| Number of lyric lines | `ROWS` in `scripts/music.py` |
-| Colors, fonts, blur | `eww-viper/eww.scss` |
-
-Apply changes with `eww -c ~/.config/eww-viper reload`.
-
-## Troubleshooting
-
-| Problem | Fix |
-|---|---|
-| `eww: not found` | Make sure the binary is in `~/.local/bin`, `start.sh` adds it to the PATH |
-| Window does not appear | Change `:windowtype "desktop"` to `"dock"` in `eww.yuck` |
-| Nothing shows up | Check `eww -c ~/.config/eww-viper logs` |
-| No lyrics | The track is not on LRCLIB |
-| Real background blur | Add the window's `WM_CLASS` (`xprop WM_CLASS`) in the Blur my Shell extension under Applications |
+## Configure
+- **Position/size:** `:geometry` in `eww-viper/eww.yuck` (e.g. `:anchor "center right"`, `:x "48px"`)
+- **Preferred player:** `PREFER` in `scripts/music.py`
+- **Lyrics timing:** `LEAD` in `scripts/music.py`
+- **Window not showing?** change `:windowtype "desktop"` to `"dock"`
+- **Real background blur:** optional, via the *Blur my Shell* extension (add the window's WM_CLASS under Applications)
 
 ## Notes
+Lyrics and cover art are fetched at runtime from LRCLIB and Spotify. Nothing copyrighted is shipped in this repo.
 
-Lyrics and cover art are fetched at runtime from LRCLIB and Spotify. Nothing copyrighted is shipped in this repository.
+---
 
 ## Deutsch
+Minimalistisches eww-Widget für **GNOME unter Wayland**: Cover, Titel, Fortschrittsbalken und **Live-Lyrics**, ohne Hintergrund.
+eww muss mit `--features x11` gebaut werden (GNOME hat kein layer-shell), Anleitung siehe oben.
+Installieren mit `sh install.sh`, starten mit `~/.config/eww-viper/start.sh`.
 
-Minimalistisches eww-Widget für GNOME unter Wayland: Cover, Titel, Fortschrittsbalken und Live-Lyrics ohne Hintergrund. eww muss mit `--features x11` gebaut werden, da GNOME kein layer-shell hat. Installation mit `sh install.sh`, Start mit `~/.config/eww-viper/start.sh`. Position, Größe und Farben stehen in `eww.yuck` und `eww.scss`.
+## Modes
 
-## License
+The widget has two layouts: `full` (centered) and `compact` (cover on the left, lyrics to the right). Switch with:
 
-MIT, see [LICENSE](LICENSE).
+    ~/.config/eww-viper/mode.sh toggle
+
+or `mode.sh full` / `mode.sh compact`. The choice is stored in `~/.config/eww-viper/mode` and used by `start.sh`.

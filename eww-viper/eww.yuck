@@ -1,8 +1,10 @@
-;; Music widget – Spotify/MPRIS + live synced lyrics (centered)
+;; Music widget - Spotify/MPRIS + live synced lyrics
+;; Zwei Modi: "full" (Bildschirmmitte) und "compact" (Mitte links). Umschalten: mode.sh
 (deflisten music
   :initial `{"active":false,"title":"Nothing playing","artist":"","cover_style":"","pos_txt":"0:00","len_txt":"0:00","pct":0,"lyrics":[]}`
   "python3 ~/.config/eww-viper/scripts/music.py daemon")
 
+;; ---------- full ----------
 (defwidget cover []
   (box :class "cover" :halign "center" :width 300 :height 300
        :style {music.cover_style}))
@@ -29,9 +31,32 @@
 
 (defwindow viper-music
   :monitor 0
-  ;; Position: anchor "center" = Bildschirmmitte, z.B. "center right" + x "48px" für rechts
   :geometry (geometry :x "0px" :y "0px" :width "560px" :height "0px" :anchor "center")
   :stacking "bg"
-  ;; Falls das Fenster nicht erscheint: "dock" probieren
   :windowtype "desktop"
   (player))
+
+;; ---------- compact ----------
+(defwidget c-left []
+  (box :class "c-left" :orientation "v" :space-evenly false :valign "center"
+    (box :class "cover-s" :halign "start" :width 200 :height 200 :style {music.cover_style})
+    (label :class "c-title"  :halign "start" :xalign 0 :text {music.title}  :limit-width 22)
+    (label :class "c-artist" :halign "start" :xalign 0 :text {music.artist} :limit-width 30)
+    (box :class "c-progress" :orientation "h" :space-evenly false :spacing 8 :halign "start"
+      (label :class "time" :text {music.pos_txt})
+      (progress :class "c-bar" :value {music.pct} :orientation "h")
+      (label :class "time" :text {music.len_txt}))))
+
+(defwidget c-lyrics []
+  (box :class "c-lyrics" :orientation "v" :space-evenly false :valign "center" :halign "start" :hexpand true
+    (for l in {music.lyrics}
+      (label :class "cl ${l.c}" :visible {l.c != "far"} :text {l.t}
+             :wrap true :xalign 0 :justify "left"))))
+
+(defwindow viper-music-compact
+  :monitor 0
+  :geometry (geometry :x "48px" :y "0px" :width "720px" :height "0px" :anchor "center left")
+  :stacking "bg"
+  :windowtype "desktop"
+  (box :class "c-root" :orientation "h" :space-evenly false :spacing 36
+    (c-left) (c-lyrics)))
