@@ -1,0 +1,31 @@
+* { all: unset; font-family: "Inter", "Adwaita Sans", "Cantarell", sans-serif; }
+window { background-color: transparent; }
+
+$glow: 0 1px 3px rgba(0, 0, 0, 0.8), 0 2px 14px rgba(0, 0, 0, 0.55);
+
+.root { padding: 40px; }
+
+.cover {
+  border-radius: 28px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.55);
+}
+
+.meta   { margin-top: 28px; }
+.title  { color: #fff; font-size: 24px; font-weight: 700; text-shadow: $glow; }
+.artist { color: rgba(255, 255, 255, 0.75); font-size: 15px; margin-top: 4px; text-shadow: $glow; }
+
+.progress { margin-top: 24px; }
+.time { color: rgba(255, 255, 255, 0.75); font-size: 12px; min-width: 34px; text-shadow: $glow; }
+.bar trough   { min-width: 340px; min-height: 5px; border-radius: 99px; background-color: rgba(255, 255, 255, 0.28); }
+.bar progress { min-height: 5px; border-radius: 99px; background-color: #fff; }
+
+// Lyrics: Blur via text-shadow, stronger the further away from the current line
+.lyrics { margin-top: 30px; }
+.lyric { font-weight: 700; padding: 5px 0; }
+.lyric.cur  { color: #fff; font-size: 25px; text-shadow: $glow; }
+.lyric.near { color: rgba(255, 255, 255, 0.45); font-size: 19px; text-shadow: 0 0 2px rgba(255, 255, 255, 0.55); }
+.lyric.mid  { color: transparent; font-size: 19px; text-shadow: 0 0 5px rgba(255, 255, 255, 0.5); }
+.lyric.far  { color: transparent; font-size: 19px; text-shadow: 0 0 9px rgba(255, 255, 255, 0.35); }

@@ -1,0 +1,37 @@
+;; Music widget – Spotify/MPRIS + live synced lyrics (centered)
+(deflisten music
+  :initial `{"active":false,"title":"Nothing playing","artist":"","cover_style":"","pos_txt":"0:00","len_txt":"0:00","pct":0,"lyrics":[]}`
+  "python3 ~/.config/eww-viper/scripts/music.py daemon")
+
+(defwidget cover []
+  (box :class "cover" :halign "center" :width 300 :height 300
+       :style {music.cover_style}))
+
+(defwidget meta []
+  (box :class "meta" :orientation "v" :space-evenly false :halign "center"
+    (label :class "title"  :text {music.title}  :limit-width 30)
+    (label :class "artist" :text {music.artist} :limit-width 40)))
+
+(defwidget progressbar []
+  (box :class "progress" :orientation "h" :space-evenly false :spacing 12 :halign "center"
+    (label :class "time" :text {music.pos_txt})
+    (progress :class "bar" :value {music.pct} :orientation "h")
+    (label :class "time" :text {music.len_txt})))
+
+(defwidget lyrics []
+  (box :class "lyrics" :orientation "v" :space-evenly false :valign "start" :halign "center" :height 300
+    (for l in {music.lyrics}
+      (label :class "lyric ${l.c}" :text {l.t} :wrap true :xalign 0.5 :justify "center"))))
+
+(defwidget player []
+  (box :class "root" :orientation "v" :space-evenly false :halign "center"
+    (cover) (meta) (progressbar) (lyrics)))
+
+(defwindow viper-music
+  :monitor 0
+  ;; Position: anchor "center" = Bildschirmmitte, z.B. "center right" + x "48px" für rechts
+  :geometry (geometry :x "0px" :y "0px" :width "560px" :height "0px" :anchor "center")
+  :stacking "bg"
+  ;; Falls das Fenster nicht erscheint: "dock" probieren
+  :windowtype "desktop"
+  (player))
