@@ -3,15 +3,27 @@
   music.py daemon           -> JSON-Stream für eww (deflisten)
   music.py toggle|next|prev|shuffle|loop|vol <0-100>|seek <0-100>
 """
-import bisect, hashlib, json, os, re, sys, threading, time
+import bisect, configparser, hashlib, json, os, re, sys, threading, time
 import urllib.error, urllib.parse, urllib.request
 from pathlib import Path
 from gi.repository import Gio, GLib
 
-PREFER = "spotify"      # Player-Präfix, der bevorzugt wird
-LEAD = 0.25             # Lyrics minimal früher umschalten (s)
-ROWS = 3                # Zeilen vor/nach der aktuellen
-TICK = 0.25
+_cp = configparser.ConfigParser(inline_comment_prefixes=(";",))
+try:
+    _cp.read(Path(__file__).resolve().parent.parent / "config.ini", encoding="utf-8")
+except Exception:
+    pass
+
+def conf(key, default, cast=str):
+    try:
+        return cast(_cp.get("general", key).strip())
+    except Exception:
+        return default
+
+PREFER = conf("player", "spotify").lower()   # preferred player name prefix
+LEAD = conf("lyrics_lead", 0.25, float)      # switch lyric lines slightly early (s)
+TICK = conf("poll_ms", 250, int) / 1000
+ROWS = 5                                      # max rows each side, visibility is set by render.py
 
 CACHE = Path(os.environ.get("XDG_CACHE_HOME", Path.home() / ".cache")) / "viper-music"
 COVERS, LYRICS = CACHE / "covers", CACHE / "lyrics"
@@ -173,7 +185,7 @@ lyr = Lyrics()
 
 def lyric_rows(pos):
     n = 2 * ROWS + 1
-    out = [{"t": "", "c": CLS[min(abs(i - ROWS), 3)]} for i in range(n)]
+    out = [{"t": "", "c": CLS[min(abs(i - ROWS), 3)], "d": abs(i - ROWS)} for i in range(n)]
     if lyr.state == "ok":
         times, texts = lyr.parsed
         cur = bisect.bisect_right(times, pos + LEAD) - 1

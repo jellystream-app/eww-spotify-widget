@@ -1,7 +1,14 @@
 #!/bin/sh
 set -e
 D="$HOME/.config/eww-viper"
+SRC="$(cd "$(dirname "$0")" && pwd)/eww-viper"
 mkdir -p "$D"
-cp -r "$(dirname "$0")/eww-viper/." "$D/"
-chmod +x "$D/start.sh" "$D/scripts/music.py"
-echo "Installed to $D  ->  run: $D/start.sh"
+KEEP=""
+if [ -f "$D/config.ini" ]; then KEEP=$(mktemp); cp "$D/config.ini" "$KEEP"; fi
+cp -r "$SRC/." "$D/"
+if [ -n "$KEEP" ]; then cp "$KEEP" "$D/config.ini"; rm -f "$KEEP"; fi
+chmod +x "$D/start.sh" "$D/mode.sh" "$D/scripts/music.py" "$D/scripts/render.py"
+python3 "$D/scripts/render.py"
+echo "Installed to $D"
+echo "Start:  $D/start.sh"
+echo "Config: $D/config.ini   (apply with: $D/mode.sh reload)"
